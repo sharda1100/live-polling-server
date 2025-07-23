@@ -11,6 +11,7 @@ const HOST = process.env.HOST || '0.0.0.0';
 const allowedOrigins = [
     "https://live-polling-app-nine.vercel.app",
     "https://live-polling-app-9ld6.vercel.app",
+    "https://live-polling-app-81de.vercel.app",
     "http://localhost:3000",
     "http://localhost:3001",
     "*"  // Allow all origins for now
