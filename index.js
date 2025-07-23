@@ -22,6 +22,11 @@ app.get('/health', (req, res) => {
     res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// Health check for Railway
+app.get('/ping', (req, res) => {
+    res.status(200).send('pong');
+});
+
 // Create HTTP server and attach Socket.IO
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -294,11 +299,6 @@ server.listen(PORT, HOST, () => {
     console.log(`✅ Server running on ${HOST}:${PORT}`);
     console.log(`✅ Socket.IO ready`);
     console.log(`✅ Environment: ${process.env.NODE_ENV || 'development'}`);
-});
-
-// Health check for Railway
-app.get('/ping', (req, res) => {
-    res.status(200).send('pong');
 });
 
 module.exports = server;

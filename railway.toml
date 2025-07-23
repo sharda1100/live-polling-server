@@ -2,6 +2,7 @@
 builder = "nixpacks"
 
 [deploy]
-healthcheckPath = "/health"
+healthcheckPath = "/ping"
 healthcheckTimeout = 100
 restartPolicyType = "on_failure"
+startCommand = "npm start"
