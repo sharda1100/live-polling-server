@@ -5,6 +5,7 @@ const { Server } = require('socket.io');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const HOST = process.env.HOST || '0.0.0.0';
 
 app.use(cors({
     origin: "*",
@@ -289,7 +290,15 @@ io.on('connection', (socket) => {
 });
 
 // Start server
-server.listen(PORT, '0.0.0.0', () => {
-    console.log(`✅ Server running on port ${PORT}`);
+server.listen(PORT, HOST, () => {
+    console.log(`✅ Server running on ${HOST}:${PORT}`);
     console.log(`✅ Socket.IO ready`);
+    console.log(`✅ Environment: ${process.env.NODE_ENV || 'development'}`);
 });
+
+// Health check for Railway
+app.get('/ping', (req, res) => {
+    res.status(200).send('pong');
+});
+
+module.exports = server;
