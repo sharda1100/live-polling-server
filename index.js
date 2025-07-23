@@ -7,8 +7,17 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const HOST = process.env.HOST || '0.0.0.0';
 
+// CORS origins - production and development
+const allowedOrigins = [
+    "https://live-polling-app-nine.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:3001"
+];
+
 app.use(cors({
-    origin: "*",
+    origin: process.env.NODE_ENV === 'production' 
+        ? "https://live-polling-app-nine.vercel.app" 
+        : allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true
 }));
@@ -31,13 +40,18 @@ app.get('/ping', (req, res) => {
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
+        origin: process.env.NODE_ENV === 'production' 
+            ? "https://live-polling-app-nine.vercel.app" 
+            : allowedOrigins,
+        methods: ["GET", "POST"],
+        credentials: true
     },
     transports: ['polling', 'websocket'],
     allowEIO3: true,
     pingTimeout: 60000,
-    pingInterval: 25000
+    pingInterval: 25000,
+    upgradeTimeout: 30000,
+    maxHttpBufferSize: 1e6
 });
 
 // Poll state
@@ -299,6 +313,20 @@ server.listen(PORT, HOST, () => {
     console.log(`✅ Server running on ${HOST}:${PORT}`);
     console.log(`✅ Socket.IO ready`);
     console.log(`✅ Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`✅ CORS Origins: ${process.env.NODE_ENV === 'production' ? 'https://live-polling-app-nine.vercel.app' : allowedOrigins.join(', ')}`);
+});
+
+// Error handling
+server.on('error', (error) => {
+    console.error('❌ Server error:', error);
+});
+
+process.on('uncaughtException', (error) => {
+    console.error('❌ Uncaught Exception:', error);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
 module.exports = server;
