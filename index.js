@@ -18,9 +18,9 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-    origin: "*",  // Allow all origins temporarily
+    origin: "*",  // Allow all origins
     methods: ["GET", "POST"],
-    credentials: true
+    credentials: false  // No credentials needed - fixes CORS wildcard issue
 }));
 app.use(express.json());
 
@@ -41,9 +41,9 @@ app.get('/ping', (req, res) => {
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "*",  // Allow all origins temporarily
+        origin: "*",  // Allow all origins
         methods: ["GET", "POST"],
-        credentials: true
+        credentials: false  // No credentials needed - fixes CORS wildcard issue
     },
     transports: ['polling', 'websocket'],
     allowEIO3: true,
