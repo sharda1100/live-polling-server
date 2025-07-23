@@ -10,14 +10,14 @@ const HOST = process.env.HOST || '0.0.0.0';
 // CORS origins - production and development
 const allowedOrigins = [
     "https://live-polling-app-nine.vercel.app",
+    "https://live-polling-app-9ld6.vercel.app",
     "http://localhost:3000",
-    "http://localhost:3001"
+    "http://localhost:3001",
+    "*"  // Allow all origins for now
 ];
 
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production' 
-        ? "https://live-polling-app-nine.vercel.app" 
-        : allowedOrigins,
+    origin: "*",  // Allow all origins temporarily
     methods: ["GET", "POST"],
     credentials: true
 }));
@@ -40,9 +40,7 @@ app.get('/ping', (req, res) => {
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: process.env.NODE_ENV === 'production' 
-            ? "https://live-polling-app-nine.vercel.app" 
-            : allowedOrigins,
+        origin: "*",  // Allow all origins temporarily
         methods: ["GET", "POST"],
         credentials: true
     },
